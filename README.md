@@ -1,20 +1,21 @@
-# AirDraw: Real-Time Virtual Drawing Board Using Hand Tracking
+# AirDraw: Real-Time Virtual Drawing Board Using OpenCV Color Tracking
 
 ## Overview
 
-AirDraw is a real-time computer vision application developed using Python, OpenCV, and MediaPipe. The system uses a webcam to detect and track the user's hand movements, allowing the user to draw on a virtual canvas without touching any physical device.
+AirDraw is a real-time computer vision application developed using Python, OpenCV, and NumPy. The system uses a webcam to detect and track a green-colored object, allowing users to draw on a virtual canvas without using a mouse or touchscreen.
 
-The project demonstrates how computer vision techniques can be used to create natural human-computer interaction through hand tracking and gesture recognition.
+The project demonstrates how computer vision techniques such as color segmentation, contour detection, object tracking, and real-time image processing can be used to create an interactive drawing application.
 
 ---
 
 ## Features
 
 - Real-time webcam video processing
-- Hand detection and tracking
-- Index finger tracking for drawing
+- Green object detection and tracking
+- Virtual drawing canvas
 - Multiple drawing colors
 - Eraser mode
+- Pause and draw mode
 - Canvas clearing function
 - User-friendly keyboard controls
 - No external datasets or image files required
@@ -27,7 +28,6 @@ The project demonstrates how computer vision techniques can be used to create na
 |------------|----------|
 | Python | Main programming language |
 | OpenCV | Video capture and image processing |
-| MediaPipe | Hand landmark detection and tracking |
 | NumPy | Array and image manipulation |
 
 ---
@@ -35,11 +35,13 @@ The project demonstrates how computer vision techniques can be used to create na
 ## System Workflow
 
 1. Capture live video from the webcam using OpenCV.
-2. Detect the user's hand using MediaPipe Hands.
-3. Identify hand landmarks and track the index finger tip.
-4. Use fingertip coordinates as a virtual pen.
-5. Draw lines on a digital canvas based on finger movement.
-6. Display the updated drawing in real time.
+2. Convert each frame from BGR color space to HSV color space.
+3. Detect the green object using color thresholding.
+4. Find the largest contour corresponding to the tracked object.
+5. Calculate the center position of the object.
+6. Use the center position as a virtual pen.
+7. Draw lines on a digital canvas based on object movement.
+8. Display the updated drawing in real time.
 
 ---
 
@@ -50,11 +52,13 @@ Webcam
    ↓
 OpenCV Video Capture
    ↓
-MediaPipe Hand Detection
+HSV Color Conversion
    ↓
-Hand Landmark Extraction
+Green Object Detection
    ↓
-Index Finger Tracking
+Contour Detection
+   ↓
+Center Point Tracking
    ↓
 Drawing Logic
    ↓
@@ -63,16 +67,19 @@ Virtual Canvas Output
 
 ---
 
-## Hand Landmark Detection
+## Color Tracking
 
-MediaPipe Hands detects 21 hand landmarks.
+The system tracks a green-colored object using the HSV color space.
 
-For this project:
+The processing steps are:
 
-- Landmark 8 → Index Finger Tip
-- Landmark 12 → Middle Finger Tip
+- Convert the webcam frame to HSV format.
+- Apply color thresholding to isolate green pixels.
+- Remove noise using erosion and dilation.
+- Detect contours in the thresholded image.
+- Track the center of the largest detected contour.
 
-The system uses these landmarks to determine drawing actions and track finger movement accurately.
+The tracked center point is used as a virtual pen for drawing.
 
 ---
 
@@ -80,9 +87,11 @@ The system uses these landmarks to determine drawing actions and track finger mo
 
 | Key | Function |
 |------|----------|
-| B | Blue Color |
-| G | Green Color |
-| R | Red Color |
+| D | Enable Drawing |
+| P | Pause Drawing |
+| B | Blue Drawing Color |
+| G | Green Drawing Color |
+| R | Red Drawing Color |
 | E | Eraser Mode |
 | C | Clear Canvas |
 | Q | Quit Application |
@@ -101,13 +110,7 @@ cd AirDraw
 ### Install Dependencies
 
 ```bash
-pip install -r requirements.txt
-```
-
-Or install manually:
-
-```bash
-pip install opencv-python mediapipe numpy
+pip install opencv-python numpy
 ```
 
 ---
@@ -115,7 +118,7 @@ pip install opencv-python mediapipe numpy
 ## Run the Application
 
 ```bash
-python main.py
+python3 airdraw.py
 ```
 
 ---
@@ -125,9 +128,9 @@ python main.py
 ```text
 AirDraw/
 │
-├── main.py
+├── airdraw.py
 ├── README.md
-└── requirements.txt
+└── screenshots/
 ```
 
 ---
@@ -135,23 +138,27 @@ AirDraw/
 ## Example Usage
 
 1. Start the application.
-2. Position your hand in front of the webcam.
-3. Move your index finger to draw.
-4. Change colors using keyboard shortcuts.
-5. Use eraser mode when needed.
-6. Clear the canvas or exit the application.
+2. Hold a green object in front of the webcam.
+3. Move the object to draw on the canvas.
+4. Change drawing colors using keyboard shortcuts.
+5. Use pause mode when repositioning the object.
+6. Use eraser mode when needed.
+7. Clear the canvas or exit the application.
 
 ---
 
 ## Results
 
-### Drawing Example
+### Demo GIF
 
-![Drawing Example](screenshots/drawing1.png)
+![AirDraw Demo](demo/airdraw_demo.gif)
 
-### Eraser Mode
+---
 
-![Eraser Mode](screenshots/drawing2.png)
+### Full Drawing Video
+
+![AirDraw Demo](demo/airdraw_demo.mp4)
+
 
 ---
 
@@ -160,9 +167,10 @@ AirDraw/
 This project applies several important computer vision techniques:
 
 - Real-Time Video Processing
-- Hand Detection
-- Hand Landmark Tracking
-- Gesture-Based Interaction
+- HSV Color Space Conversion
+- Color Segmentation
+- Contour Detection
+- Object Tracking
 - Image Drawing and Overlay
 - Human-Computer Interaction
 
@@ -172,21 +180,21 @@ This project applies several important computer vision techniques:
 
 During development, several challenges were encountered:
 
-- Maintaining stable hand detection under different lighting conditions
-- Reducing drawing delays during rapid hand movements
-- Improving fingertip tracking accuracy
-- Handling temporary hand occlusions
+- Maintaining stable color detection under different lighting conditions
+- Reducing drawing jitter caused by rapid object movement
+- Improving object tracking accuracy
+- Implementing pause and drawing modes for better usability
 
 ---
 
-## Future Improvements
+## Future 
 
-Future versions of AirDraw may include:
+Future versions of AirDraw can be updated:
 
-- Multiple hand support
+- Multi-color object tracking
 - Shape recognition
 - Save drawing as image
-- Gesture-based color selection
+- Gesture-based controls
 - Virtual whiteboard collaboration
 - AI-powered handwriting recognition
 
@@ -194,7 +202,7 @@ Future versions of AirDraw may include:
 
 ## Project Motivation
 
-The goal of this project is to explore computer vision techniques and develop an interactive application using hand tracking technology. AirDraw demonstrates how webcam-based systems can replace traditional input devices and create a more natural user experience.
+The goal of this project is to explore computer vision techniques and develop an interactive drawing application using object tracking technology. AirDraw demonstrates how webcam-based systems can be used to create intuitive and engaging human-computer interaction.
 
 ---
 
