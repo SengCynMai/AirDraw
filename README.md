@@ -149,15 +149,15 @@ AirDraw/
 
 ## Results
 
-### Demo GIF
 
-![AirDraw Demo](demo/airdraw_demo.gif)
+|                                   |                                    |
+| --------------------------------- | ---------------------------------- |
+| ![AirDraw Demo](airdraw_demo.gif) | ![AirDraw Demo](airdraw_demo2.gif) |
 
----
 
 ### Full Drawing Video
 
-![AirDraw Demo](demo/airdraw_demo.mp4)
+[▶ Download / Watch Full Video](demo/airdraw_demo.mp4)
 
 
 ---
@@ -206,8 +206,5 @@ The goal of this project is to explore computer vision techniques and develop an
 
 ---
 
-## Author
 
 **Seng Cyn Mai**  
-Computer Science Department  
-Computer Vision Final Project
